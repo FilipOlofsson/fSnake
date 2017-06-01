@@ -34,18 +34,25 @@ public class GUI extends Canvas {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, width, height);
+                g.setColor(Color.GREEN);
+                g.fillRect(2 * snake.velocity, 2 * snake.velocity, width - 4 * snake.velocity, height - 4 * snake.velocity);
+                g.setColor(Color.RED);
+                g.fillOval(apple.x, apple.y, apple.diameter, apple.diameter);
+                g.setColor(Color.BLACK);
                 for (Node node : snake.nodeList) {
                     g.fillRect(node.x, node.y, snake.velocity, snake.velocity);
                 }
-                g.drawRect(apple.x, apple.y, apple.diamater, apple.diamater);
-                g.setFont(new Font("Arial", Font.PLAIN, 22));
-                g.drawString("" + points, 50, 50);
+                g.setColor(Color.RED);
+                g.setFont(new Font("Arial", Font.PLAIN, 25));
+                g.drawString("" + points, width/2, 25);
                 if(!running) {
-                    g.drawString("You lost. " + points, width/2, height/2);
+                    g.drawString("You lost. You got " + points + " points.", width/2 - 200, height/2);
                 }
             }
         };
-        frame.setPreferredSize(new Dimension(width, height));
+        panel.setPreferredSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(panel);
         frame.setVisible(true);
@@ -76,15 +83,25 @@ public class GUI extends Canvas {
         });
     }
 
+    public boolean isNotGameOver() {
+        if(snake.head.getCenterX() < snake.velocity * 2 || snake.head.getCenterY() < snake.velocity * 2)
+            return false;
+        if(snake.head.getCenterX() > width - snake.velocity * 2 || snake.head.getCenterY() > height - snake.velocity * 2)
+            return false;
+
+        return true;
+    }
+
     private void Engine() throws InterruptedException {
 
         long lastTime = System.nanoTime();
         double delta = 0;
 
         while(running) {
+            running = isNotGameOver();
             long now = System.nanoTime();
             if(now - lastTime > 600000000) {
-                if(snake.head.equals(apple.rectangle)) {
+                if(snake.headEquals(apple)) {
                     apple = new Apple(width, height);
                     snake.addNode();
                     points++;

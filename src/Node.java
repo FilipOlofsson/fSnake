@@ -6,9 +6,4 @@ public class Node {
         this.y = y;
     }
 
-    public boolean equals(Node node) {
-        if(this.x == node.x && this.y == node.y)
-            return true;
-        return false;
-    }
 }

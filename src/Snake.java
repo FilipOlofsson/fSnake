@@ -21,10 +21,25 @@ public class Snake {
         direction = Direction.NORTH;
         head = new Rectangle();
         head.setSize(25, 25);
-        nodeList.add(new Node(100, 100));
-        nodeList.add(new Node(125, 100));
-        nodeList.add(new Node(150, 100));
-        nodeList.add(new Node(175, 100));
+        head.setLocation(200, 200);
+        nodeList.add(new Node(200, 200));
+        nodeList.add(new Node(225, 200));
+        nodeList.add(new Node(250, 200));
+        nodeList.add(new Node(275, 200));
+    }
+
+    public boolean headEquals(Apple apple) {
+        if(head.x == apple.x && head.y == apple.y)
+            return true;
+        if(head.x + velocity == apple.x && head.y == apple.y)
+            return true;
+        if(head.x == apple.x && head.y + velocity == apple.y)
+            return true;
+        if(head.x == apple.x && head.y - velocity == apple.y)
+            return true;
+        if(head.x - velocity == apple.x && head.y == apple.y)
+            return true;
+        return false;
     }
 
     public void addNode() {
